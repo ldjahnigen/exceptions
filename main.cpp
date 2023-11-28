@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+
+// define custom exceptions using inheritance
 class invalidCharacterException : public std::exception {
   public:
     std::string message = "an invalid character was passed";
@@ -21,8 +23,36 @@ class invalidRangeException : public std::exception {
 char character(char start, int offset);
 
 int main() {
+  // base case, should not throw an error
   try {
     std::cout << character('a', 1) << '\n';
+  } catch (invalidRangeException e) {
+    std::cout << e.message << '\n';
+  } catch (invalidCharacterException e) {
+    std::cout << e.message << '\n';
+  }
+
+  // should throw invalidRangeException
+  try {
+    std::cout << character('a', -1) << '\n';
+  } catch (invalidRangeException e) {
+    std::cout << e.message << '\n';
+  } catch (invalidCharacterException e) {
+    std::cout << e.message << '\n';
+  }
+
+  // should not throw an error
+  try {
+    std::cout << character('Z', 1) << '\n';
+  } catch (invalidRangeException e) {
+    std::cout << e.message << '\n';
+  } catch (invalidCharacterException e) {
+    std::cout << e.message << '\n';
+  }
+  
+  // should throw invalidCharacterException
+  try {
+    std::cout << character('?', 1) << '\n';
   } catch (invalidRangeException e) {
     std::cout << e.message << '\n';
   } catch (invalidCharacterException e) {
@@ -34,6 +64,8 @@ int main() {
 
 
 char character(char start, int offset) {
+  bool upper; 
+
   if (!isalpha(start)) {
     invalidCharacterException e;
     throw e;
@@ -42,6 +74,7 @@ char character(char start, int offset) {
     invalidRangeException e;
     throw e;
   }
-  return start + offset;
+
+    return start + offset;
 }
 
