@@ -43,7 +43,7 @@ int main() {
 
   // should not throw an error
   try {
-    std::cout << character('Z', 1) << '\n';
+    std::cout << character('Z', -1) << '\n';
   } catch (invalidRangeException e) {
     std::cout << e.message << '\n';
   } catch (invalidCharacterException e) {
@@ -59,22 +59,34 @@ int main() {
     std::cout << e.message << '\n';
   }
 
+  // should throw invalidRangeException
+  try {
+    std::cout << character('A', 32) << '\n';
+  } catch (invalidRangeException e) {
+    std::cout << e.message << '\n';
+  } catch (invalidCharacterException e) {
+    std::cout << e.message << '\n';
+  }
+
   return 0;
 }
 
 
 char character(char start, int offset) {
-  bool upper; 
-
   if (!isalpha(start)) {
     invalidCharacterException e;
     throw e;
   }
-  if (offset < 0 || offset > 26) {
+  if (!isalpha(start + offset)) {
     invalidRangeException e;
     throw e;
   }
 
-    return start + offset;
+  if (start + offset == tolower(start) || start + offset == toupper(start)) {
+    invalidRangeException e;
+    throw e;
+  }
+
+  return start + offset;
 }
 
