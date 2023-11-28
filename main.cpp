@@ -73,15 +73,19 @@ int main() {
 
 
 char character(char start, int offset) {
+  // make sure inital character is a letter
   if (!isalpha(start)) {
     invalidCharacterException e;
     throw e;
   }
+
+  // make sure target character is a letter
   if (!isalpha(start + offset)) {
     invalidRangeException e;
     throw e;
   }
 
+  // prohibit case conversions
   if (start + offset == tolower(start) || start + offset == toupper(start)) {
     invalidRangeException e;
     throw e;
